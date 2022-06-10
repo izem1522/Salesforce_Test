@@ -37,7 +37,11 @@ class SalesforceService{
         return $this->callService($endpoint, $method, null);
     }
 
-
+    protected function callAllCandidate() {
+        $endpoint = 'https://soljit35-dev-ed.my.salesforce.com' . '/services/data/v54.0/queryAll/?q=SELECT+Name+FROM+Candidature__c' ; //TODO change this to dynamic
+        $method = "GET";
+        return $this->callService($endpoint, $method, null);
+    }
 
     private function callService($endPoint, $method , $query ) {
         $client = new Client ();

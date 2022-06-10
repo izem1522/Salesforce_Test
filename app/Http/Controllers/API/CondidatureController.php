@@ -28,5 +28,9 @@ class CondidatureController extends SalesforceService
         return response()->json($details);
     }
 
-
+    public function GetAllCandidate()
+    {
+        $allCandidate = $this->callAllCandidate();
+        return response()->json($allCandidate);
+    }
 }
