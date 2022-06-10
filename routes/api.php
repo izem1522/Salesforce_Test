@@ -19,3 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get("auth", "API\CondidatureController@Authentication");
+Route::get("get_candidate", "API\CondidatureController@GetCandidateCById");
+Route::get("GetCandidateDetails", "API\CondidatureController@GetCandidateDetails");
+

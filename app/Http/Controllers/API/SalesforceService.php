@@ -6,6 +6,7 @@ use DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Log\Logger;
+use phpDocumentor\Reflection\DocBlock\Tags\Method;
 
 class SalesforceService{
     protected $grant_type = "password";
@@ -14,6 +15,7 @@ class SalesforceService{
     protected $client_secret = "EC97DAFBF9F6F2399DE5E7BADA2E9BBEF6B3B6E832DC435668AA452940AD9501";
     protected $password = "entretient_1235zoLmTaUDLiouUaOAN6WhOQPi";
     protected $endPoint = "https://login.salesforce.com/services/oauth2/token";
+    protected $bearerToken = "00D4L000000gmbH!AQsAQDil_fWXoehsY_QDi0oRjfEuJp2aZzSUkkPWQv9W9MxUvEuJ4B_zvnXTgj_g7GS5woLpgmbPEBeHAFdDER451bfln0BX";
 
 
     public function callAuthService()
@@ -29,48 +31,38 @@ class SalesforceService{
 
     }
 
-//    private function callService($method, $endPoint, $query, $objectBridge) {
-//
-//        $client = new Client ();
-//
-//
-//        $bodyTag = "";
-//        if ($method == "POST") {
-//            $bodyTag = "body";
-//            $query = json_encode ( $query );
-//        } else {
-//            $bodyTag = "query";
-//        }
-//
-//        $resultBody = new \stdClass ();
-//
-//        try {
-//            $request =  [
-//                'headers' => [
-//                    'X-P' => $this->apiKey,
-//                    'timestamp' => $timestamp,
-//                    'signature' => $signature
-//                ]];
-//            if (is_array ( $query ) && ( str_contains($endPoint, 'cancel'))){
-//                $endPoint .=  '?bookingId=' . $query ["bookingId"];
-//            }else {
-//                $request[$bodyTag] = $query;
-//            }
-//            $res = $client->request ( $method, $endPoint, $request);
-//            $resultBody = json_decode ( $res->getBody ( true ) );
-//        } catch ( \GuzzleHttp\Exception\ClientException $e ) {
-//            $this->logger->log ( "exception in calling action " . $endPoint . " Response : " . $e->getResponse ()->getBody ()->getContents () );
-//        } catch ( GuzzleException $e ) {
-//            $this->logger->log ( "exception in calling action " . $endPoint . " Response : " . $e->getResponse ()->getBody ()->getContents () );
-//        }
-//        $this->logger->log ( "calling action " . $endPoint ." Response : " . json_encode ( $resultBody ) );
-//
-//        if ($objectBridge){
-//            $resultBody = $resultBody;
-//            $resultBody = new ObjectBridge($resultBody);
-//        }
-//
-//        return $resultBody;
-//
-//    }
+    protected function callGetCandidatesById($id) {
+        $endpoint = 'https://soljit35-dev-ed.my.salesforce.com' . '/services/data/v54.0/sobjects/Candidature__c/' . $id; //TODO change this to dynamic
+        $method = "GET";
+        return $this->callService($endpoint, $method, null);
+    }
+
+
+
+    private function callService($endPoint, $method , $query ) {
+        $client = new Client ();
+
+
+        $bodyTag = "";
+        if ($method == "POST") {
+            $bodyTag = "body";
+        } else {
+            $bodyTag = "query";
+        }
+
+        $resultBody = new \stdClass ();
+
+
+        $request =  [
+            'headers' => [
+                'Authorization' => "Bearer " . $this->bearerToken,
+            ]];
+        $query ?? $request[$bodyTag] = $query;
+        $res = $client->request ( $method, $endPoint, $request);
+        $resultBody = json_decode ( $res->getBody ( true ) );
+
+
+        return $resultBody;
+
+    }
 }
