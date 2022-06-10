@@ -43,13 +43,26 @@ class SalesforceService{
         return $this->callService($endpoint, $method, null);
     }
 
+    protected function callCreateCandidate($candidateName) {
+        $endpoint = 'https://soljit35-dev-ed.my.salesforce.com' . '/services/data/v54.0/sobjects/Candidature__c/' ; //TODO change this to dynamic
+        $method = "POST";
+        return $this->callService($endpoint, $method, $candidateName);
+    }
+
+    protected function callUpdateCandidate($candidateId, $candidateLastName) {
+        $endpoint = 'https://soljit35-dev-ed.my.salesforce.com' . '/services/data/v54.0/sobjects/Candidature__c/' .$candidateId ; //TODO change this to dynamic
+        $method = "PATCH";
+        return $this->callService($endpoint, $method, $candidateLastName);
+    }
+
     private function callService($endPoint, $method , $query ) {
         $client = new Client ();
 
 
         $bodyTag = "";
-        if ($method == "POST") {
+        if ($method == "POST" or $method == "PATCH") {
             $bodyTag = "body";
+            $query = json_encode ( $query );
         } else {
             $bodyTag = "query";
         }
@@ -60,8 +73,10 @@ class SalesforceService{
         $request =  [
             'headers' => [
                 'Authorization' => "Bearer " . $this->bearerToken,
+                'Content-type' => "Application/Json ",
             ]];
-        $query ?? $request[$bodyTag] = $query;
+        if ($query != null)
+         $request[$bodyTag] = $query;
         $res = $client->request ( $method, $endPoint, $request);
         $resultBody = json_decode ( $res->getBody ( true ) );
 

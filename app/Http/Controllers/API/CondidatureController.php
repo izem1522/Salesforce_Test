@@ -33,4 +33,18 @@ class CondidatureController extends SalesforceService
         $allCandidate = $this->callAllCandidate();
         return response()->json($allCandidate);
     }
+
+    public function CreateCandidate(Request $request)
+    {
+        $response = $this->callCreateCandidate(array("Name" => $request->input('Name')));
+        return response()->json($response);
+    }
+
+    public function ModifyCandidateLastName(Request $request)
+    {
+        //TODO make a try catch block
+        $this->callUpdateCandidate($request->input('candidate_id'), array("Last_Name__c" => $request->input('new_last_name')));
+        return response()->json(array("success" => true));
+    }
+
 }

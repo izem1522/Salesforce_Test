@@ -22,3 +22,5 @@ Route::get("auth", "API\CondidatureController@Authentication");
 Route::get("get_candidate", "API\CondidatureController@GetCandidateCById");
 Route::get("GetCandidateDetails", "API\CondidatureController@GetCandidateDetails");
 Route::get("GetAllCandidate", "API\CondidatureController@GetAllCandidate");
+Route::post("CreateCandidate", "API\CondidatureController@CreateCandidate");
+Route::patch("ModifyCandidateLastName", "API\CondidatureController@ModifyCandidateLastName");
